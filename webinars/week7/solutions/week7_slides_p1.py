@@ -8,18 +8,32 @@ Notes
 Solutions can be identified by the tag <solution>. Simply un-comment the
 statements inside the tagged blocks. For example:
 
+    Before:
 
-Before:
+    # <solution>
+    #res = ser.loc[start:end]
+    # </solution>
 
-# <solution>
-#res = ser.loc[start:end]
-# </solution>
+    After:
 
-After:
+    # <solution>
+    res = ser.loc[start:end]
+    # </solution>
 
-# <solution>
-res = ser.loc[start:end]
-# </solution>
+Examples are identified by the tag <example>. To see a particular example,
+simply uncomment the statements inside the tagged block:
+
+    Before:
+
+    # <example>
+    #res = df.loc[clabel] # -> KeyError ('close' is not part of df.index)
+    # </example>
+
+    After:
+
+    # <example>
+    res = df.loc[clabel] # -> KeyError ('close' is not part of df.index)
+    # </example>
 
 """
 import pprint as pp
@@ -27,8 +41,12 @@ import pprint as pp
 import pandas as pd
 
 # This is an auxiliary function, please do not modify
+# You do not need to worry about the body of this function. All you
+# need to understand is the docstring
 def printit(obj, msg=None):
-    """ Pretty prints `obj` as long as `obj` is not '?'
+    """ Pretty prints `obj` as long as `obj` is not '?'.
+
+    Will also print the type of the object `obj`.
 
     Parameters
     ----------
@@ -37,6 +55,26 @@ def printit(obj, msg=None):
 
     msg : str, optional
         Message preceding obj representation
+
+    Examples
+    --------
+
+    The commands:
+
+    >> d = {'a': 1}
+    >> printit(d, "This is the dict d")
+
+
+    Will write the following to the standard output (i.e., will "print" the
+    following):
+    
+    ----------------------------------------
+    This is the dict d
+
+    {'a': 1}
+
+    Type: <class 'dict'>
+    ----------------------------------------
 
     """
     sep = '-'*40
@@ -108,9 +146,43 @@ bday = [
 ser = pd.Series(data=prices, index=dates)
 #printit(ser, "The series `ser`:")
 
+# ----------------------------------------------------------------------------
+#   the series look like this:
+# ----------------------------------------------------------------------------
+# ser:
+#   2020-01-02    7.16
+#   2020-01-03    7.19
+#   2020-01-06    7.00
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00
+#   2020-01-13    7.02
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+
+
 # Data Frame with close and Bday columns
 df = pd.DataFrame(data={'close': ser, 'bday': bday}, index=dates)
 #printit(df, "The data frame `df`:")
+
+# ----------------------------------------------------------------------------
+#   The DF looks like this 
+# ----------------------------------------------------------------------------
+# df:
+#               close  bday
+#   2020-01-02   7.16     1
+#   2020-01-03   7.19     2
+#   2020-01-06   7.00     3
+#   2020-01-07   7.10     4
+#   2020-01-08   6.86     5
+#   2020-01-09   6.95     6
+#   2020-01-10   7.00     7
+#   2020-01-13   7.02     8
+#   2020-01-14   7.11     9
+#   2020-01-15   7.04    10
+
+
 
 
 # ----------------------------------------------------------------------------
@@ -126,26 +198,27 @@ df = pd.DataFrame(data={'close': ser, 'bday': bday}, index=dates)
 # ----------------------------------------------------------------------------
 
 
-# ----------------------------------------------------------------------------
-#   Series
-# ----------------------------------------------------------------------------
-# ser:
-#   2020-01-02    7.16
-#   2020-01-03    7.19
-#   2020-01-06    7.00
-#   2020-01-07    7.10
-#   2020-01-08    6.86
-#   2020-01-09    6.95
-#   2020-01-10    7.00
-#   2020-01-13    7.02
-#   2020-01-14    7.11
-#   2020-01-15    7.04
 
 
 # ------------------------------------------------------------
 # Series.loc: Selection using a single label
 # ser.loc[label] --> scalar if label in index, error otherwise
 # ------------------------------------------------------------
+# Task: Select the element with label '2020-01-10':
+#
+#   2020-01-02    7.16
+#   2020-01-03    7.19
+#   2020-01-06    7.00
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00 <--
+#   2020-01-13    7.02
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+#
+# The result will be 7.00
+
 label = '2020-01-10'
 res  = '?'
 # <solution>
@@ -153,9 +226,12 @@ res  = '?'
 # </solution>
 printit(res, f"ser.loc[{label}]:")
 
+
 # IMPORTANT: Label must exist in the index
 label = '2020-01-30'
+# <example>
 #res = ser.loc[label] # --> KeyError
+# </example>
 
 
 
@@ -163,6 +239,23 @@ label = '2020-01-30'
 # Series.loc: Selection using a sequence of labels
 # ser.loc[seq] --> series if labels in index, error otherwise
 # ------------------------------------------------------------
+# Task: Select the following elements from `ser`
+#
+#   2020-01-02    7.16
+#   2020-01-03    7.19
+#   2020-01-06    7.00
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00 <--
+#   2020-01-13    7.02 <--
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+#
+# The result will be the series: 
+#   2020-01-10    7.00  
+#   2020-01-13    7.02  
+
 label_seq = ['2020-01-10', '2020-01-13']
 res  = '?'
 # <solution>
@@ -170,14 +263,41 @@ res  = '?'
 # </solution>
 printit(res, f"ser.loc[{label_seq}]")
 
-# Every label must exist
+
+# NOTE: Every label must exist
 label_seq = ['2020-01-10', '2020-01-11']
+# <example>
 #res = ser.loc[label_seq] # --> KeyError
+# </example>
+
+
+
 
 # ------------------------------------------------------------
 # Series.loc: Selection using slices
 # ser.loc[slice] --> series
 # ------------------------------------------------------------
+# Task: Select the following elements from the series using slices
+#
+#   2020-01-02    7.16
+#   2020-01-03    7.19
+#   2020-01-06    7.00
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00 <--
+#   2020-01-13    7.02 <--
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+#
+# The output will be a series:
+#
+#   2020-01-10    7.00  <--
+#   2020-01-13    7.02  <--
+
+# When using slices, Pandas will return the **interval** of labels that 
+# included in the slice
+#
 # IMPORTANT: ENDPOINTS ARE INCLUDED!!!
 start = '2020-01-10'
 end = '2020-01-13'
@@ -185,26 +305,40 @@ res  = '?'
 # <solution>
 #res = ser.loc[start:end]
 # </solution>
-printit(res, f"ser.loc[{start}:{end}]")
+printit(res, f"ser.loc['{start}':'{end}']")
 
 
-# Pandas will return the interval of labels between the slice and index
+# Be careful when using slices: For instance suppose you made a mistake
+# and set the start of the slice to '3020-01-10' (i.e., 3020 instead of 2020)
+# 
+# Pandas will try to find the interval of index labels that is included in a
+# slice that that starts with '3020-01-10'. There is no such slice, so the
+# result will be an empty series
+
 start = '3020-01-10'
 end = '2020-01-13'
 res  = '?'
-# <solution>
+# <example>
 #res = ser.loc[start:end]
-# </solution>
+# </example>
 printit(res, f"ser.loc['{start}':'{end}']")
 
 # IMPORTANT: Selection using slices will NOT GENERATE ERRORS as long as the labels
-# data type is consistent with the index. For instance:
+# data type is consistent with the index. For instance, the following slice
+# does not make logical sense. 
+#
+#   start = 'start'
+#   end = 'end'
+# 
+# Pandas will try to find the interval of index labels that begins with
+# "start". Since the letter "s" comes after the number "2" (in alphabetical
+# order), the interval of index labels is empty:
 start = 'start'
 end = 'end'
 res  = '?'
-# <solution>
+# <example>
 #res = ser.loc[start:end]
-# </solution>
+# </example>
 printit(res, f"ser.loc['{start}':'{end}']")
 
 
@@ -213,29 +347,93 @@ printit(res, f"ser.loc['{start}':'{end}']")
 # ser.loc can be used in assignemnt statements:
 # <target> = <expression>
 # ------------------------------------------------------------
+# Task: Suppose we want to set the value of the element with
+# label '2020-01-10' to -99
+# 
+#                   |
+#                   V
+#   2020-01-02     7.16
+#   2020-01-03     7.19
+#   2020-01-06     7.00
+#   2020-01-07     7.10
+#   2020-01-08     6.86
+#   2020-01-09     6.95
+#   2020-01-10   -99.00     <--
+#   2020-01-13     7.02
+#   2020-01-14     7.11
+#   2020-01-15     7.04
 
-# Example 1: changing values associated with existing labels
-#ser2 = ser.copy()
+# First, we will create a copy of the original series 
+# NOTE: You can create  copies of both series and data frames using the
+# method .copy
+#
+# The following statement will create a NEW series with the same data and
+# indexes as the one assigned to the variable `ser`:
+ser2 = ser.copy()
+
+# <example>
 #old_label = '2020-01-10' # NOTE: This label exists in the index
 #ser2.loc[old_label] = -99
 #printit(ser2, f"The ser2:")
+# </example>
 
+# Task: Suppose we want to add a new element to the series with
+# label '2020-01-11' and value -99
+# 
+#                   |
+#                   V
+#   2020-01-02     7.16
+#   2020-01-03     7.19
+#   2020-01-06     7.00
+#   2020-01-07     7.10
+#   2020-01-08     6.86
+#   2020-01-09     6.95
+#   2020-01-10     7.00
+#   2020-01-11     -99      <-- New
+#   2020-01-13     7.02
+#   2020-01-14     7.11
+#   2020-01-15     7.04
 
-# Example 2: If the label does not exist, pandas will append it to the series
+# First try: Just use an assignment statement
+# <example>
 #new_label = '2020-01-11' # NOTE: This label does not exist
 #ser2.loc[new_label] = -99
 #printit(ser2, f"The new ser2:")
+# </example>
 
-# Be careful when appending observations and then using slices
+# If what we did above was enough, the expression
+#
+#   ser2.loc['2020-01-10':'2020-01-13']
+#
+# should return:
+#
+#   2020-01-10     7.00
+#   2020-01-11     -99 
+#   2020-01-13     7.02
+# 
+# However, this is NOT the case
+
+# <example>
 #start = '2020-01-10'
 #end = '2020-01-13'
 #res = ser2.loc[start:end]
-#printit(res, f"ser2.loc['{start}':'{end}'] \nNOTE: '{new_label}' not included!")
+#printit(res, f"ser2.loc['{start}':'{end}'] \nNOTE: '2020-01-11' not included!")
+# </example>
 
-# The problem is that the index is not sorted
+# 
+# The problem is that the index is not sorted. The task above requires two
+# operations:
+#
+# <example>
+#new_label = '2020-01-11' 
+#ser2.loc[new_label] = -99
 #ser2.sort_index(inplace=True)
+#
+#start = '2020-01-10'
+#end = '2020-01-13'
 #res = ser2.loc[start:end]
 #printit(res, f"ser2.loc['{start}':'{end}'] \nNOTE: after sorting")
+# </example>
 
 
 
@@ -253,6 +451,21 @@ printit(res, f"ser.loc['{start}':'{end}']")
 # ser.iloc[pos] --> scalar if pos <= ser.size
 # ------------------------------------------------------------
 #printit(ser.size, f"ser.size:")
+
+# Task: Suppose we want to select the first element using iloc
+# 
+#   2020-01-02    7.16 <--
+#   2020-01-03    7.19
+#   2020-01-06    7.00
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00 
+#   2020-01-13    7.02
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+#
+# The result should be 7.16
 pos = 0
 res  = '?'
 # <solution>
@@ -264,10 +477,31 @@ printit(res, f"ser.iloc[{pos}]")
 # Series.iloc: Selection using a seq of positions
 # ser.iloc[seq of pos] --> series if pos <= ser.size
 # ------------------------------------------------------------
-# Try it first!
-pos_seq = [0, 1]
+# Task: Suppose we want to select the first and third element
+# of the series using iloc and a sequence of positions
+#
+#   2020-01-02    7.16 <-- Yes
+#   2020-01-03    7.19
+#   2020-01-06    7.00 <-- Yes
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00
+#   2020-01-13    7.02
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+#
+# The result should be a series:
+#
+#   2020-01-02    7.16
+#   2020-01-06    7.00
+
+pos_seq = [0, 2]
+res = '?'
+# <solution>
 #res = ser.iloc[pos_seq]
-#printit(res, f"ser.iloc[{pos_seq}]")
+# </solution>
+printit(res, f"ser.iloc[{pos_seq}]")
 
 # ------------------------------------------------------------
 # Series.iloc: Selection using slices
@@ -275,40 +509,68 @@ pos_seq = [0, 1]
 #
 # IMPORTANT: Endpoints are NOT included
 # ------------------------------------------------------------
+# Task: Suppose we want to select the first two elements using iloc
+# and slices:
+# 
+# 
+#   2020-01-02    7.16 <-- 
+#   2020-01-03    7.19 <-- 
+#   2020-01-06    7.00
+#   2020-01-07    7.10
+#   2020-01-08    6.86
+#   2020-01-09    6.95
+#   2020-01-10    7.00
+#   2020-01-13    7.02
+#   2020-01-14    7.11
+#   2020-01-15    7.04
+#
+# The result will be a series:
+#
+#   2020-01-02    7.16  
+#   2020-01-03    7.19  
+#
+
 # Try it first!
 start = 0
-end = 1
+end = 2
 res  = '?'
 # <solution>
 #res = ser.iloc[start:end]
 # </solution>
 printit(res, f"ser.iloc[{start}:{end}]:")
 
-res = '?'
-#printit(res, f"ser.iloc[0]")
-
-
-# pandas will try to return the interval of "positions" inside the slice
+# 
+# As before, Pandas will try to return the interval of "positions" included in
+# the slice. The slice may be "longer" than the array
+#
 start = 0
 end = 100000
 res  = '?'
-# <solution>
+# <example>
 #res = ser.iloc[start:end]
-# </solution>
+# </example>
 printit(res, f"ser.iloc[{start}:{end}]")
 
 # Very common mistake...
+# The problem with the slice below is that it starts at position -1 (the end
+# of the array, and then ends at position 0. The slice is "empty" so Pandas 
+# will return an empty series:
+#
 start = -1
 end = 0
+res = '?'
+# <example>
 #res = ser.iloc[start:end]
-#printit(res, f"ser.iloc[{start}:{end}]")
+# </example>
+printit(res, f"ser.iloc[{start}:{end}]")
+
 
 
 # --------------------------------------------------------------------------------------------
-# Series[] : In the past, you sould use [] with both positions and labels.
-# Using ser[pos] will be deprecated
+# Series[] : In the past, you could use [] with both positions and labels.
+# This was very confusion so this behavior will be deprecated in future
+# versions of Pandas.
 #
-# My advice: Always use either loc or iloc, not []
 #
 # | Selection                     | Result       | Notes                                     |
 # |-------------------------------|--------------|-------------------------------------------|
@@ -316,19 +578,24 @@ end = 0
 # | Series[list of labels]        | Series       | All labels must exist, otherwise KeyError |
 # | Series[start_label:end_label] | Series       | Behaviour will vary                       |
 # --------------------------------------------------------------------------------------------
+# My advice: Always use either loc or iloc, not []
 
-pos = 0
+# <example>
+#pos = 0
 #x1  = ser[pos] # -> Deprecation warning
 #res = ser.iloc[pos]
 #printit(res, f"This is res")
 #printit(x1, f"This is x1")
+# </example>
 
 # You can use labels and []
-label = '2020-01-02'
+# <example>
+#label = '2020-01-02'
 #x2  = ser[label]
 #res = ser.loc[label]
 #printit(res, f"This is res")
 #printit(x2, f"This is x2")
+# </example>
 
 
 
@@ -372,8 +639,23 @@ label = '2020-01-02'
 # ----------------------------------------------------------------------------
 # DataFrames.loc using single labels
 # ----------------------------------------------------------------------------
-#printit(df.index, "The df.index:")
-#printit(df.columns, "The df.columns:")
+#
+# Task: Suppose we want to select the following element from DF
+#               |
+#               V
+#             close        bday
+# 2020-01-02   7.16 <--     1
+# 2020-01-03   7.19         2
+# 2020-01-06   7.00         3
+# 2020-01-07   7.10         4
+# 2020-01-08   6.86         5
+# 2020-01-09   6.95         6
+# 2020-01-10   7.00         7
+# 2020-01-13   7.02         8
+# 2020-01-14   7.11         9
+# 2020-01-15   7.04        10
+#
+# The result should be 7.16
 
 
 # df.loc[row label, col label] --> scalar
@@ -385,7 +667,11 @@ res  = '?'
 # </solution>
 printit(res, f"df.loc[{rlabel}, {clabel}]")
 
-
+# Task: Suppose we want to select the following SERIES
+# 
+#   close   7.16 
+#   bday    1
+#   
 # df.loc[row label] --> df.loc[row label, :]
 # In both cases, the result is a SERIES
 res1 = '?'
@@ -397,12 +683,38 @@ res2 = '?'
 printit(res1, f"This is df.loc['{rlabel}', :]")
 printit(res2, f"This is df.loc['{rlabel}']")
 
+# NOTE: The first indexer is for ROWS, not COLS
 # df.loc[ column label ] --> KeyError (unless there row with same label exists)
-#res = df.loc[rlabel]
 
+# <example>
+#res = df.loc[clabel] # -> KeyError ('close' is not part of df.index)
+# </example>
+
+# If you want to select all values for a single column, you must use:
+#
 # df.loc[:, clabel] --> series with column values (same index)
+#
+# Tssk: Suppose you want to select the following SERIES from DF:
+#
+# 
+# 2020-01-02    7.16
+# 2020-01-03    7.19
+# 2020-01-06    7.00
+# 2020-01-07    7.10
+# 2020-01-08    6.86
+# 2020-01-09    6.95
+# 2020-01-10    7.00
+# 2020-01-13    7.02
+# 2020-01-14    7.11
+# 2020-01-15    7.04
+#
+
 res = '?'
-#printit(res, f"df.loc[:, 'close']")
+# <solution>
+#res = df.loc[:, 'close']
+# </solution>
+printit(res, f"df.loc[:, 'close']")
+
 
 # ----------------------------------------------------------------------------
 # DataFrames.loc using seq of labels
@@ -411,25 +723,45 @@ res = '?'
 #   df.loc[label, seq of labels] --> series with COLUMN labels
 #   df.loc[seq of labels, label] --> series with ROW (index) labels
 # ----------------------------------------------------------------------------
-rlabel = '2020-01-02'
-rlabel_seq = ['2020-01-02', '2020-01-06']
 
-clabel = 'close'
-clabel_seq = ['close', 'bday']
 
 # -------------------
 # df.loc[seq labels, label] --> series with rows as index labels
 # df.loc[label, seq labels] --> series with cols as index labels
 # -------------------
 
-# 1. df.loc[label, seq labels]
-res = '?'
-# <solution>
-#res = df.loc[rlabel, clabel_seq]
-# </solution>
-printit(res, f"df.loc['{rlabel}', {clabel_seq}]")
-
+# Task: We want to select the elements of the column 'close' with row labels 
+# ['2020-01-02', '2020-01-06']
+#
+#               |
+#               V
+#             close        bday
+# 2020-01-02   7.16 <--     1
+# 2020-01-03   7.19         2
+# 2020-01-06   7.00 <--     3
+# 2020-01-07   7.10         4
+# 2020-01-08   6.86         5
+# 2020-01-09   6.95         6
+# 2020-01-10   7.00         7
+# 2020-01-13   7.02         8
+# 2020-01-14   7.11         9
+# 2020-01-15   7.04        10
+#
+# Suppose first, we want the result to be the SERIES
+#                
+# 2020-01-02    7.16  
+# 2020-01-06    7.00  
+# 
+# NOTE: Series only have one index (there is no column index)
+#
+# This means we need to pass
+# - A sequence of row labels
+# - A single column label
+#
 # 1. df.loc[seq labels, label]
+
+rlabel_seq = ['2020-01-02', '2020-01-06']
+clabel = 'close'
 res = '?'
 # <solution>
 #res = df.loc[rlabel_seq, clabel]
@@ -437,17 +769,112 @@ res = '?'
 printit(res, f"df.loc[{rlabel_seq}, '{clabel}'] is:")
 
 
+# What if we want the result to be a DF?
+#
+#               close 
+# 2020-01-02    7.16  
+# 2020-01-06    7.00  
+#
+# NOTE: DF have two indexes (df.index, df.columns)
+# 
+# This means we need to pass
+# - a sequence of row labels
+# - a sequence of column labels with ONE VALUE
+#
+# 2. df.loc[seq labels, [label] ]
+rlabel_seq = ['2020-01-02', '2020-01-06']
+clabel = 'close'
+res = '?'
+# <solution>
+#res = df.loc[ rlabel_seq, [clabel] ] # Note: [clabel], not clabel
+# </solution>
+printit(res, f"df.loc[{rlabel_seq}, ['{clabel}'] ] is:")
+
+# So, we will only get a data frame if both row and column indexers are either
+# sequences of labels or slices
+
+
+# Task: We want to select the elements from the DF with row label '2020-01-02'
+# and column labels ['close', 'bday']
+#
+#               |       |
+#               V       V
+#             close    bday
+# 2020-01-02   7.16      1      <--
+# 2020-01-03   7.19      2
+# 2020-01-06   7.00      3
+# 2020-01-07   7.10      4
+# 2020-01-08   6.86      5
+# 2020-01-09   6.95      6
+# 2020-01-10   7.00      7
+# 2020-01-13   7.02      8
+# 2020-01-14   7.11      9
+# 2020-01-15   7.04     10
+#
+# Suppose first, we want the result to be a DF with one row
+#                
+#             close    bday
+# 2020-01-02   7.16      1    
+#
+# We need to pass the following to .loc
+# - A sequence with the label '2020-01-02'
+# - A sequence with labels ['close', 'bday']
+
+rlabel = '2020-01-02'
+rlabel_seq = ['2020-01-02', '2020-01-06']
+
+clabel = 'close'
+clabel_seq = ['close', 'bday'] 
+
+# 3. df.loc[ [label], seq labels]
+res = '?'
+# <solution>
+#res = df.loc[ ['2020-01-02'], ['close', 'bday'] ]
+# </solution>
+printit(res, f"df.loc[ ['{rlabel}'], {clabel_seq}]")
+
+# Suppose next, we wan the result to be a series with index equal to ['close',
+# 'bday]. This series will look like this:
+#
+#       close    7.16
+#       bday     1.00
+# 
+# In this case, we need to pass
+# - A single label '2020-01-02'
+# - A sequence with labels ['close', 'bday']
+
+# 4. df.loc[ label, seq labels]
+
+res = '?'
+# <solution>
+#res = df.loc[ '2020-01-02', ['close', 'bday'] ]
+# </solution>
+printit(res, f"df.loc[ '{rlabel}', {clabel_seq}]")
+
+
 
 # ----------------------------------------------------------------------------
 # DataFrames.loc using slices
 # ----------------------------------------------------------------------------
-clabel_start = 'close'
-clabel_end =   'bday'
 
-rlabel_start = '2020-01-10'
-rlabel_end = '2020-01-15'
+# Suppose we want to select the following elements from DF using slices
+# 
+#
+#                bday  close 
+#   2020-01-10      7   7.00 
+#   2020-01-13      8   7.02 
+#   2020-01-14      9   7.11 
+#   2020-01-15     10   7.04 
+#
+#
+# Note that the order of the columns is different from the original DF
 
-# df.loc[slice, slice] --> data frame
+# We could try to pass the following slices:
+#
+# '2020-01-10':'2020-01-15'
+# 'bday':'close'
+#
+# But this will not work:
 res  = '?'
 # <solution>
 #res = df.loc[\
@@ -456,18 +883,46 @@ res  = '?'
 # </solution>
 printit(res, f"df.loc['2020-01-10':'2020-01-15','bday':'close']")
 
-# Remember that pandas will not sort the index before selecting the objs
+# The result is an empty DF. This is because the order of the columns in 
+# the original DF is ['close', 'bday']. There is no interval of column labels
+# that is included in a slice that starts with 'bday' and ends with 'close'.
+# 
+# However, the following will work:
+#
+# <example>
+#res = df.loc[
+#      '2020-01-10':'2020-01-15',
+#      'bday':'close':-1,
+#       ]
+#printit(res, f"df.loc['2020-01-10':'2020-01-15','bday':'close']")
+# </example>
+
+# This is because the slice 'bday':'close':-1, will find the interval from
+# 'bday' to 'close' but in REVERSE: 
+
+
+# In fact, the following can be used to reverse the columns of any data frame
+# <example>
+#res = df.loc[:, ::-1]
+#printit(res, f"df.loc[:, ::-1]")
+# </example>
+
+
+# DELETE
+# The other alternative is to sort the column index first:
+# <example>
 #df2 = df.copy()
 #df2.sort_index(axis=1, inplace=True)
 #res = df2.loc[ \
 #      '2020-01-10':'2020-01-15',
 #      'bday':'close']
 #printit(res, f"df2.loc['2020-01-10':'2020-01-15','bday':'close']")
+# </example>
 
 
 
 # ----------------------------------------------------------------------------
-# Exercise: Use df.loc[slice, label] so the following series is returned:
+# Exercise: Use df.loc[slice, label] so the following series is returned
 #   2020-01-10     7
 #   2020-01-13     8
 #   2020-01-14     9
@@ -481,7 +936,7 @@ printit(res)
 
 
 # ----------------------------------------------------------------------------
-# Exercise: Use df.loc[label, '2020-01-02'] WITHOUT MODIFYING DF,
+# Exercise: Use df.loc['2020-01-02', slide] WITHOUT MODIFYING DF,
 # so the following series is returned for '2020-01-02':
 #  close    7.16
 #  bday     1.00
@@ -518,40 +973,52 @@ printit(res)
 # DataFrames.iloc using single labels
 # ----------------------------------------------------------------------------
 
-# Exercise: Use df.iloc to return the element in the first column and second row,
-# or 7.19
+# Exercise: Use df.iloc to return the following ELEMENT from the DF
+#
+#                 |
+#                 v
+#               close       bday
+#   2020-01-02   7.16         1
+#   2020-01-03   7.19 <--     2
+#   2020-01-06   7.00         3
+#   2020-01-07   7.10         4
+#   2020-01-08   6.86         5
+#   2020-01-09   6.95         6
+#   2020-01-10   7.00         7
+#   2020-01-13   7.02         8
+#   2020-01-14   7.11         9
+#   2020-01-15   7.04        10
+#
+# The result should be 7.19
 res = '?'
 # <solution>
-# df.iloc[pos, pos] --> scalar
-#cpos = 0
-#rpos = 1
-#res = df.iloc[rpos, cpos]
+#res = df.iloc[1, 0]
 # </solution>
 printit(res)
 
-# Exercise: Use df.iloc[pos] to select the last row of df, which will be the folllowing
-# series:
+# Exercise: Use df.iloc[pos] to select the last row of df, which will be the
+# following SERIES:
+#
 #   close     7.04
 #   bday     10.00
+#
 res = '?'
 # <solution>
-# Note: df.iloc[pos] --> df.iloc[pos, :] --> series iff pos <= df.shape[0]
-# If pos > df.shape[0], exception
-#res = df.iloc[-1]
-#printit(df.shape)
+#res = df.iloc[-1]   # Or df.iloc[-1, :]
 # </solution>
 printit(res)
 
 # ----------------------------------------------------------------------------
 # DataFrames.iloc using seq of labels and slices
 # ----------------------------------------------------------------------------
-# Exercise:
-# Use .iloc to produce the following objects from df
-#   1. a DF with all rows from df but with the order of columns reversed
-#   2. a SERIES with the last two values from the 'bday' column
-#   3. a DF with the the first two rows of df (and all columns)
+# Exercise: Use .iloc to produce the following objects from the df
+#
+# NOTE: There are multiple ways to complete the same task. As long as the
+# object returned is correct, you are free to choose the approach that best
+# suits you
 
-# 1. a DF with all rows from df but with the order of columns reversed:
+# 1. A DF with all rows from df but with the columns in reverse order:
+#
 #               bday  close
 #   2020-01-02     1   7.16
 #   2020-01-03     2   7.19
@@ -563,19 +1030,25 @@ printit(res)
 #   2020-01-13     8   7.02
 #   2020-01-14     9   7.11
 #   2020-01-15    10   7.04
-res1 = '?'
-# <solution>
-# Different approaches which give the same results:
-# I think the most elegant is the first one
-#res1 = df.iloc[:, ::-1]
 #
-#res1  = df.iloc[:, [1, 0]]
-#res1 = df.iloc[:, reversed(range(len(df.columns)))]
+res1 = '?'
+
+# <solution>
+# There are many approaches. Here is a general example:
+#res1 = df.iloc[:, ::-1]
 # </solution>
 printit(res1)
 
+# <solution>
+# You could also use the position of the columns (less general since you need
+# to know how many columns)
+#res1  = df.iloc[:, [1, 0]]
+#printit(res1)
+# </solution>
 
-#  2. a SERIES with the last two values from the 'bday' column:
+
+# 2. A SERIES with the last two values from the 'bday' column:
+#
 #   2020-01-14    7.11
 #   2020-01-15    7.04
 res2  = '?'
@@ -584,14 +1057,16 @@ res2  = '?'
 # </solution>
 printit(res2)
 
-#   3. a DF with the the first two rows of df (and all columns)
+
+# 3. a DF with the first two rows of df (and all columns)
+#
 #             close  bday
 # 2020-01-02   7.16     1
 # 2020-01-03   7.19     2
+#
 res3  = '?'
-
 # <solution>
-res3 = df.iloc[:2]
+#res3 = df.iloc[:2]
 # </solution>
 printit(res3)
 
@@ -600,41 +1075,76 @@ printit(res3)
 # DataFrames.iloc using slices
 # ----------------------------------------------------------------------------
 # Exercise:
-# Use .iloc and slices to produce the following objects from df
-#   1. a DF with all rows from df except the first one
-#   2. a DF (NOT A SERIES) with the last column of df
-#   3. a DF with the first two rows of df (using slices, not seq of positions)
-#   4. a df with the last 100 (one hundred) rows from df (assume you don't know how many
-#       rows the data frame df has)
+# Use .iloc and slices to produce the following objects from the df
+#
+# NOTE: There are multiple ways to complete the same task. As long as the
+# object returned is correct, you are free to choose the approach that best
+# suits you
 
-#   1. a DF with all rows from df except the first one
+# 1. A DF with all rows from df except the first one:
+#
+#               close  bday
+#   2020-01-03   7.19     2
+#   2020-01-06   7.00     3
+#   2020-01-07   7.10     4
+#   2020-01-08   6.86     5
+#   2020-01-09   6.95     6
+#   2020-01-10   7.00     7
+#   2020-01-13   7.02     8
+#   2020-01-14   7.11     9
+#   2020-01-15   7.04    10
 res1  = '?'
 # <solution>
 #res1 = df.iloc[1:]
 # </solution>
 printit(res1)
 
-#   2. a DF (NOT A SERIES) with the last column of df
+
+
+# 2. a DF (NOT A SERIES) with the last column of df:
+#
+#               bday
+#   2020-01-02     1
+#   2020-01-03     2
+#   2020-01-06     3
+#   2020-01-07     4
+#   2020-01-08     5
+#   2020-01-09     6
+#   2020-01-10     7
+#   2020-01-13     8
+#   2020-01-14     9
+#   2020-01-15    10
+#
+
 res2  = '?'
 # <solution>
 #res2 = df.iloc[:, -1:]
 # </solution>
 printit(res2)
 
-#   3. a DF with the first two rows of df (using slices, not seq of positions)
+
+# 3. A DF with the first two rows of df (using slices, not seq of positions):
+#
+#             close  bday
+# 2020-01-02   7.16     1
+# 2020-01-03   7.19     2
+#
 res3  = '?'
 # <solution>
 #res3 = df.iloc[:2]
 # </solution>
 printit(res3)
 
-#   4. a df with the last 100 (one hundred) rows from df (assume you don't know how many
-#       rows the data frame df has)
+
+# 4. A df with the last 100 (one hundred) rows from df (assume you don't know how many
+#   rows the data frame df has)
 res4  = '?'
 # <solution>
+# The result will the entire DF
 #res4 = df.iloc[-100:]
 # </solution>
 printit(res4)
+
 
 
 # ----------------------------------------------------------------------------
@@ -648,21 +1158,70 @@ printit(res4)
 # ----------------------------------------------------------------------------
 
 # df[label] --> series with the elements from the COLUMN labeled 'label'
+#
+# Exercise: Select the SERIES with the elements from the column 'close':
+# 
+#
+# 2020-01-02    7.16
+# 2020-01-03    7.19
+# 2020-01-06    7.00
+# 2020-01-07    7.10
+# 2020-01-08    6.86
+# 2020-01-09    6.95
+# 2020-01-10    7.00
+# 2020-01-13    7.02
+# 2020-01-14    7.11
+# 2020-01-15    7.04
 res = '?'
 # <solution>
 #res  = df['close']
 # </solution>
 printit(res)
 
-# df[label] -->KeyError if column label not found
-#res = df['2020-01-02']
-
 
 # df[seq of labels] --> DF with the column labels in the order provided
+#
+# Exercise: The data frame with the columns in reversed order (using seq of
+# values, not slides)
+# 
+#             bday  close
+# 2020-01-02     1   7.16
+# 2020-01-03     2   7.19
+# 2020-01-06     3   7.00
+# 2020-01-07     4   7.10
+# 2020-01-08     5   6.86
+# 2020-01-09     6   6.95
+# 2020-01-10     7   7.00
+# 2020-01-13     8   7.02
+# 2020-01-14     9   7.11
+# 2020-01-15    10   7.04
+#
 clabel_seq = ['bday', 'close'] 
 res = '?'
 # <solution>
 #res = df[clabel_seq]
+# </solution>
+printit(res)
+
+
+# df[slice of ROW labels] --> DF with those ROWS
+#
+# NOTE: df[slice] OPERATE OVER ROWS, NOT COLUMNS
+#
+# Exercise: Use df[slice] to select all observations from 2020-02-10
+# to 2020-01-15:
+# 
+#             close  bday
+# 2020-01-10   7.00     7
+# 2020-01-13   7.02     8
+# 2020-01-14   7.11     9
+# 2020-01-15   7.04    10
+#
+rstart = '2020-01-10'
+rend = '2020-01-15'
+res = '?'
+# <solution>
+#res = df[rstart:rend]
 # </solution>
 printit(res)
 

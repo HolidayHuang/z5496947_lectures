@@ -4,24 +4,6 @@ Scaffold and solutions to the codes we discussed during the second part of the
 class (Week 7)
 
 
-Notes
------
-
-Solutions can be identified by the tag <solution>. Simply un-comment the
-statements inside the tagged blocks. For example:
-
-
-Before:
-
-# <solution>
-#res = ser.loc[start:end]
-# </solution>
-
-After:
-
-# <solution>
-res = ser.loc[start:end]
-# </solution>
 
 """
 
@@ -77,18 +59,18 @@ def print_df(df):
 # Load the data contained in qan_prc_2020.csv to a DF
 # and then set the index using the .set_index method
 qan_naive_read  = '?'
-# <solution>
+# <example>
 #qan_naive_read  = pd.read_csv(QAN_PRC_CSV)
 #qan_naive_read.set_index('Date', inplace=True)
-# </solution>
+# </example>
 print_df(qan_naive_read)
 
 
 # Alternative 2: use the index_col parameter
 qan_better_read = '?'
-# <solution>
+# <example>
 #qan_better_read  = pd.read_csv(QAN_PRC_CSV, index_col='Date')
-# </solution>
+# </example>
 print_df(qan_better_read)
 
 
@@ -114,3 +96,5 @@ print_df(qan_better_read)
 #  read_csv and to_csv have many useful parameters, which we will discuss later
 # in the course
 # ----------------------------------------------------------------------------
+
+

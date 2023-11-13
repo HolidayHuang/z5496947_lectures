@@ -106,7 +106,7 @@ print(df)
 # ser.loc[label] --> scalar if label in index, error otherwise
 
 # Set `x` below to be the price on 2020-01-10
-x  = '?'
+x = ser.loc['2020-01-10']
 
 # The following will raise a KeyError
 #ser.loc['3000-01-10'] 
@@ -115,20 +115,20 @@ x  = '?'
 # Using .loc to set elements
 # Copy the series
 ser2 = ser.copy() 
-#print(ser2)                 
+#print(ser2)
 
 
 # Set the price for 2020-01-02 to zero
-#ser2.loc['2020-01-02'] = 0  
-#print(ser2)                 
+#ser2.loc['2020-01-02'] = 0
+#print(ser2)
 
 
 # 1.1.2 Series.loc: Selection using sequence of labels
 # will return a series
-x  = '?'
-#print(x)                                  
+#x = ser.loc[['2020-01-03', '2020-01-10']]
+#print(x)
 
-#print(type(x))              # --> <class 'pandas.core.series.Series'> 
+#print(type(x))              # --> <class 'pandas.core.series.Series'>
 
 
 # 1.1.3 Series.loc: Selection using slices
@@ -137,8 +137,8 @@ x  = '?'
 # Importantly, the endpoint will be included when selecting with slices! 
 
 # Set x so it contains all prices from '2020-01-03' to (and including) '2020-01-10'
-x  = '?'
-#print(x)    
+#x = ser.loc['2020-01-03': '2020-01-10']
+#print(x)
 
 
 
@@ -149,18 +149,19 @@ x  = '?'
 # A single row and column labels will return a single value (scalar)
 
 # For instance, selecting the close price on January 3, 2020
-x  = '?'
-#print(x)  # --> 7.19   
+#x = ser.loc['2020-01-03']
+#x = df.loc['2020-01-03', 'Close']
+#print(x)  # --> 7.19
 
 # A single row **or** a single column label will return a series:
 # The following will return a series corresponding to the column "Close"
-x  = '?'
-#print(x) 
+#x = df.loc[:, 'Close'] # --> all the rows
+#print(x)
 
 #print(type(df.loc[:,'Close'])) # --> <class 'pandas.core.series.Series'> 
 
-y  = '?'
-#print(y) 
+#y = df.loc['2020-01-03', :] # --> all the columns
+#print(y)
 
 #print(type(df.loc['2020-01-03', :])) # --> <class 'pandas.core.series.Series'> 
 
@@ -178,7 +179,7 @@ y  = '?'
 
 # 1.2.2 Dataframe.loc: Selection using sequence of labels
 # Set x so it contains the closing prices for '2020-01-02' and '2020-01-03'
-x  = '?'
+#x = df.loc[['2020-01-02', '2020-01-03'], 'Close']
 #print(x)    
 
 
@@ -188,7 +189,7 @@ x  = '?'
 #  - A data frame otherwise
 
 # The next statement is equivalent to x = df.loc['2020-01-01':'2020-01-10']
-x  = '?'
+#x = df.loc['2020-01-01':'2020-01-10', :]
 #print(x) 
 #print(type(x)) 
 
@@ -201,39 +202,39 @@ x  = '?'
 # However, single row labels and open column slices will NOT return a
 # dataframe, they will return a series!!!
 
-#x = df.loc['2020-01-06':, :] 
-#print(x) 
+#x = df.loc['2020-01-06':, :]
+#print(x)
 
 #type(df.loc['2020-01-06':, :]) # --><class 'pandas.core.frame.DataFrame'> 
 
-#x = df.loc['2020-01-06', 'Close':] 
-#print(x) 
+#x = df.loc['2020-01-06', 'Close':]
+#print(x)
 
 
 # Slices do not work as expected if the data is not sorted
 # NOTE: don't worry about the rename method now
 
-#df2 = df.copy() 
+#df2 = df.copy()
 
-#df2.rename(index={'2020-01-08':'1900-01-01'}, inplace=True) 
-#print(df2) 
+#df2.rename(index={'2020-01-08':'1900-01-01'}, inplace=True)
+#print(df2)
 
-#x = df2.loc['2020-01-03':'2020-01-10', :] 
-#print(x) 
+#x = df2.loc['2020-01-03':'2020-01-10', :]
+#print(x)
 
 # You can avoid these issues by sorting the dataframe first
-#df2.sort_index(inplace=True) 
-#x = df2.loc['2020-01-03':'2020-01-10', :] 
-#print(x) 
+#df2.sort_index(inplace=True)
+#x = df2.loc['2020-01-03':'2020-01-10', :]
+#print(x)
 
 
 # This will return a DataFrame
-#x = df.loc['2020-01-03':'2020-01-03'] 
-#print(x) 
+#x = df.loc['2020-01-03':'2020-01-03']
+#print(x)
 
 # This will return a series
-#x = df.loc['2020-01-03'] 
-#print(x) 
+#x = df.loc['2020-01-03']
+#print(x)
 
 
 
