@@ -58,21 +58,20 @@ def print_df(df):
 #
 # Load the data contained in qan_prc_2020.csv to a DF
 # and then set the index using the .set_index method
-qan_naive_read  = pd.read_csv(QAN_PRC_CSV)
-qan_naive_read.set_index('Date', inplace=True)
+qan_naive_read  = '?'
 # <example>
 #qan_naive_read  = pd.read_csv(QAN_PRC_CSV)
 #qan_naive_read.set_index('Date', inplace=True)
 # </example>
-# print_df(qan_naive_read)
+print_df(qan_naive_read)
 
 
 # Alternative 2: use the index_col parameter
-qan_better_read = pd.read_csv(QAN_PRC_CSV, index_col='Date')
+qan_better_read = '?'
 # <example>
 #qan_better_read  = pd.read_csv(QAN_PRC_CSV, index_col='Date')
 # </example>
-# print_df(qan_better_read)
+print_df(qan_better_read)
 
 
 
@@ -81,16 +80,16 @@ qan_better_read = pd.read_csv(QAN_PRC_CSV, index_col='Date')
 # ----------------------------------------------------------------------------
 # First, we read the data into a dataframe (without setting the index)
 # Then save it using he .to_csv method
-qan_prc = pd.read_csv(QAN_PRC_CSV)
+#qan_prc = pd.read_csv(QAN_PRC_CSV)
 
 # We then save the data into the file located at QAN_NOHEAD_CSV above.
 # If we set the parameter header to False, the header columns will not be saved
-qan_prc.to_csv(QAN_NOHEAD_CSV, header=False)
+#qan_prc.to_csv(QAN_NOHEAD_CSV, header=False)
 
 
 # If we want the column headers but not the index, we can set the parameter 'index'
 # to False
-qan_prc.to_csv(QAN_NOINDEX_CSV, index=False)
+#qan_prc.to_csv(QAN_NOINDEX_CSV, index=False)
 
 
 # ----------------------------------------------------------------------------
